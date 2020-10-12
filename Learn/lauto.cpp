@@ -13,6 +13,7 @@ void testAuto(){
     auto pt = new Test(1);
     std::cout << pt->i << std::endl;
     delete pt;
+    // 不推荐使用 auto_ptr 用错了极度不安
     std::auto_ptr<Test> p(new Test(2));
     std::cout << p->i++ << std::endl;
     std::auto_ptr<Test> p2=p;
