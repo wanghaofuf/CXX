@@ -60,9 +60,31 @@ void testshare_ptr(){
     std::cout << "aptr->spb is unique " << std::boolalpha << aptr->spb.unique() <<std::endl;
 }
 
+void testweak_ptr(){
+    std::shared_ptr<A> spa = std::make_shared<A>("spa");
+    std::cout << spa.use_count() << std::endl;
+    std::weak_ptr<A> wpa(spa);
+    std::cout << wpa.use_count() << std::endl;
+    std::weak_ptr<A> wpa2=wpa;
+    std::cout << wpa2.use_count() << std::endl;
+    std::shared_ptr<A> spa2 = spa;
+    std::cout << wpa2.use_count() << std::endl;
+}
+
+void testunique_ptr(){
+    std::unique_ptr<A> upa (new A("upa"));
+    std::shared_ptr<A> spa =std::make_shared<A>("spa");
+    std::cout << spa.use_count() << std::endl;
+    std::unique_ptr<A> upa2 = std::move(upa);
+    std::cout << spa.use_count() << std::endl;
+    std::cout << upa->name << std::endl;
+}
+
 int main(int argc, char **argv)
 {
-    testshare_ptr();
-    testoldpoint();
+    //testshare_ptr();
+    //testoldpoint();
+    //testweak_ptr();
+    testunique_ptr();
     return 0;
 }
