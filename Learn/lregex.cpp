@@ -19,9 +19,27 @@ void testregex_match(){
     std::cout << std::endl;
 }
 
+void testmarchresults(){
+    std::smatch sm;
+    std::string str {"wanghaofu"};
+    if(std::regex_match(str,sm,std::regex("wanghao(.*)")))
+    {
+        for (auto i = sm.begin(); i != sm.end();i++)
+        {
+            std::cout << *i << std::endl;
+        }
+    }   
+    std::cmatch cm;
+    if(std::regex_match("wanghaofu",cm,std::regex("wan(.*)(hao)(.*)"))){
+        for (auto i = cm.begin(); i != cm.end();i++){
+            std::cout << *i << std::endl;
+        }
+    }
+}
 
 int main(int argc, char **argv){
 
-    testregex_match();
+    //testregex_match();
+    testmarchresults();
     return 0;
 }
