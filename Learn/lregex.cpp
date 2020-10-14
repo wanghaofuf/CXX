@@ -37,9 +37,21 @@ void testmarchresults(){
     }
 }
 
+void testregex_search(){
+
+    std::string str = "wanghaofu is a rich man!";
+    std::smatch sm;
+    if(std::regex_search(str,sm,std::regex("fu"))){
+        std::cout << sm.prefix().str() << std::endl;
+        for(auto x:sm) std::cout << x << std::endl;
+        std::cout << sm.suffix().str() << std::endl;
+    }
+}
+
 int main(int argc, char **argv){
 
     //testregex_match();
-    testmarchresults();
+    //testmarchresults();
+    testregex_search();
     return 0;
 }
