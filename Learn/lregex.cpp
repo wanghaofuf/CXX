@@ -55,6 +55,11 @@ void testregex_search(){
 
 void testregex_replace(){
     std::cout << std::regex_replace("wanghao is rich man,wanghao is good!",std::regex("\\b(wanghao) \\b(is)"),"$1fu is too") << std::endl;
+    std::string str = "there wang is rich man!";
+    std::string result;
+    std::regex_replace(std::back_inserter( result),str.begin(),str.end(),std::regex("\\b(wang)"),"$1haofu") ;
+    std::cout << result << std::endl;
+    
 }
 
 
