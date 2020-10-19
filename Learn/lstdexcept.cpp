@@ -30,7 +30,7 @@ void testruntime_error(){
         std::cerr << "std::exception:" << e.what()  << std::endl;
     }
     catch(...) {
-        std::cerr << "..." << std::endl;
+        std::cerr << "..." << std::endl;    
     }
 }
 
