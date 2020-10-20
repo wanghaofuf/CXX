@@ -4,7 +4,7 @@
 void testduration(){
     milliseconds ms(2500);
     seconds s(61);
-    mins mi(61);
+    minutes mi(61);
     hours h(25);
     days d(1);
     std::cout << (std::chrono::duration_cast<seconds>(ms)).count() << std::endl;
