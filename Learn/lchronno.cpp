@@ -1,114 +1,5 @@
-#include <iostream>
-#include <chrono>
 #include <limits>
-#include <sstream>
-#include <iomanip>
-
-using nanoseconds = std::chrono::nanoseconds;   //std::chrono::duration<int64_t,std::ratio<std::nano>>;
-using microseconds = std::chrono::microseconds; //std::chrono::duration<int64_t,std::ratio<std::micro>>
-using milliseconds = std::chrono::milliseconds; //std::chrono::duration<int64_t,std::ratio<1,1000>>;
-using seconds = std::chrono::seconds;           //std::chrono::duration<int64_t>;
-using mins = std::chrono::minutes;               //std::chrono::duration<int64_t,std::ratio<60>>;
-using hours = std::chrono::hours;               //std::chrono::duration<int64_t,std::ratio<3600>>;
-using days = std::chrono::duration<int64_t,std::ratio<86400L>>;
-using TimePoint = std::chrono::system_clock::time_point;
-
-class DateTime {
-    using int64 = int64_t;
-    private:
-    struct tm tm;
-    time_t t ;
-public:
-    int64_t Year(){return tm.tm_year+1900L;};
-    int64_t Month(){return tm.tm_mon+1L;};
-    int64_t Day(){return tm.tm_mday;};
-    hours Hour(){return hours(tm.tm_hour);};
-    mins Min(){return mins(tm.tm_min);};
-    seconds Sec(){return seconds(tm.tm_sec);};
-    milliseconds Millisec{0};
-    microseconds Microsec{0};
-    nanoseconds Nanosec{0};
-    DateTime(int64_t year, int64_t month, int64 day, int64_t hour, int64_t min, int64 sec)
-    {
-        tm.tm_year = year-1900;
-        tm.tm_mon = month-1;
-        tm.tm_mday = day;
-        tm.tm_hour = hour;
-        tm.tm_min = min;
-        tm.tm_sec = sec;
-        t = mktime(&tm);
-    }
-    DateTime(const TimePoint& tp = std::chrono::system_clock::now()){
-        t = tp.time_since_epoch().count() /1000000000L;
-        tm =*(localtime(&t));
-        Millisec=milliseconds((tp.time_since_epoch().count() - (tp.time_since_epoch().count()/1000000000)*1000000000) / 1000000);
-        Microsec = microseconds((tp.time_since_epoch().count() - (tp.time_since_epoch().count()/1000000)*1000000) / 1000);
-        Nanosec = nanoseconds((tp.time_since_epoch().count() - (tp.time_since_epoch().count()/1000)*1000));
-    }
-    TimePoint toTimePoint(){
-        return TimePoint(nanoseconds(t*1000000000L + Millisec.count()*1000000L + Microsec.count()*1000L + Nanosec.count()));
-    }
-    DateTime& AddYear(const int& years){
-        tm.tm_year += years;   
-        t = mktime(&tm);
-        return *this;        
-    }
-    DateTime& AddMonths(const int& months){
-        tm.tm_mon += months;   
-        t = mktime(&tm);
-        return *this;
-    }
-    DateTime& AddDays(const int& days){
-        tm.tm_mday += days;
-        t = mktime(&tm);
-        return *this;
-    }
-    DateTime& AddHours(const int& hours){
-        tm.tm_hour += hours;
-        t = mktime(&tm);
-        return *this;
-    }
-    DateTime& AddMinutes(const int& minutes){
-        tm.tm_min = minutes;
-        t = mktime(&tm);
-        return *this;
-    }
-    DateTime& AddSeconds(const int& seconds){
-        tm.tm_sec = seconds;
-        t = mktime(&tm);
-        return *this;
-    }
-    DateTime& AddMilliseconds(const int& milliseconds){
-        *this = DateTime(toTimePoint()+=std::chrono::milliseconds(milliseconds));
-        return *this;
-    }
-    DateTime& AddMicroseconds(const int& microseconds){
-        *this = DateTime(toTimePoint()+=std::chrono::microseconds(microseconds));
-        return *this;
-    }
-    DateTime& AddNanoseconds(const int& nanoseconds){
-        *this = DateTime(toTimePoint()+=std::chrono::nanoseconds(nanoseconds));
-        return *this;
-    }
-    
-    std::string toString(std::string fmt="yyyy-MM-dd HH:mm:ss milli.micro.nano"){
-        std::stringstream ss;
-        if(fmt=="yyyy-MM-dd"){
-             ss << Year() << "-" << std::setw(2)<< std::setfill('0')<< Month() << "-" <<std::setw(2)<< std::setfill('0')<< Day() << " " ;
-        }
-        else if(fmt=="yyyy-MM-dd HH:mm:ss"){
-             ss << Year() << "-" << std::setw(2)<< std::setfill('0')<< Month() << "-" <<std::setw(2)<< std::setfill('0')<< Day() << " " 
-            <<std::setw(2)<< std::setfill('0')<< Hour().count() << ":" <<std::setw(2)<< std::setfill('0')<<Min().count() << ":" << std::setw(2)<< std::setfill('0')<<Sec().count()<< " " ;        
-        }
-        else{
-            ss << Year() << "-" << std::setw(2)<< std::setfill('0')<< Month() << "-" <<std::setw(2)<< std::setfill('0')<< Day() << " " 
-            <<std::setw(2)<< std::setfill('0')<< Hour().count() << ":" <<std::setw(2)<< std::setfill('0')<<Min().count() << ":" << std::setw(2)<< std::setfill('0')<<Sec().count()<< " " 
-            <<std::setw(3)<< std::setfill('0')<< Millisec.count() << "." <<std::setw(3)<< std::setfill('0')<< Microsec.count() << "." << std::setw(3)<< std::setfill('0')<<Nanosec.count();   
-        }
-        return ss.str();
-    }
-};
-
+#include "DateTime.hpp"
 
 void testduration(){
     milliseconds ms(2500);
@@ -167,6 +58,9 @@ void testsystemClock(){
 void testDateTime(){
     std::cout << DateTime(2020,1,1,1,1,1).AddDays(366).AddHours(24).AddMinutes(60).AddSeconds(60).AddMilliseconds(1000).AddMicroseconds(1000).AddNanoseconds(1001).AddDays(-366).toString()<< std::endl;
     std::cout << DateTime().AddDays(31).toString() << std::endl;
+    const DateTime& date = DateTime();
+    std::cout << date.TotalSeconds() << std::endl;
+    std::cout << std::chrono::duration_cast<days>((DateTime(2021,10,21,3,0,1) - DateTime(2020,10,20,2,0,0))).count() << std::endl;
 }
 
 int main(int argc, char **argv)
