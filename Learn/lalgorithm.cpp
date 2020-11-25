@@ -196,24 +196,56 @@ void test_find_if_not(){
     std::cout << "不符合条件的是 " << *findit << "  所在位置是 " << findit - vals.begin() << std::endl;
 }
 
+void test_for_each(){
+    std::vector<int> vals{1,2,3,4};
+    std::for_each(vals.begin(), vals.end(),[](int& i){ 
+        std::cout << i << std::endl;
+        i++;
+    });
+    for(auto i:vals){
+        std::cout << i << std::endl;
+    }
+}
+
+void test_generate(){
+    std::array<int,5> vals;
+    std::generate(vals.begin(),vals.end(),[](){return 1;});  
+    for(auto i:vals){
+        std::cout << i << std::endl;
+    }  
+    std::generate_n(vals.begin(),3,[](){return 0;});
+    for (auto i:vals)
+        std::cout << i << std::endl;
+}
+
+void test_includes(){
+    int arr[]{1,2,3,4,5,6,7,8,9,10,11};
+    int arr1[]{2,2,3};
+    std::cout << "arr 中 是否包括 arr1 1-3 " << std::boolalpha << std::includes(arr,arr+10,arr1+1,arr1+3) << std::endl;
+    std::cout << "arr 中 是否包括 arr1 0-3 " << std::boolalpha << std::includes(arr,arr+10,arr1,arr1+3)<< std::endl;
+}
+
 int  main(int argc, char **argv){
-    //test_all_of();
-    //test_any_of();
-    //test_binary_search();
-    //test_copy();
-    //test_copy_backward();
-    //test_copy_if();
+    // test_all_of();
+    // test_any_of();
+    // test_binary_search();
+    // test_copy();
+    // test_copy_backward();
+    // test_copy_if();
     // test_copy_n();
     // test_count();
     // test_count_if();
-    //test_equal();
+    // test_equal();
     // test_equal_range();
     // test_fill();
     // test_find();
     // test_find_end();
     // test_find_first_of();
     // test_find_if();
-    test_find_if_not();
+    // test_find_if_not();
+    // test_for_each();
+    // test_generate();
+    test_includes();
 
     return 0;
 }
