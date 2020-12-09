@@ -5,6 +5,6 @@
 class DP_EXPORT AbsObserver{
 public:
     virtual ~AbsObserver() = default;
-    virtual bool Visit(const std::string& msg)=0;
+    virtual bool Visit(std::string msg)=0;
 };
 #endif //__ABS_Observer__H__

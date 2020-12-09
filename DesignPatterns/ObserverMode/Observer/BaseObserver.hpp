@@ -5,8 +5,9 @@
 
 class DP_EXPORT BaseObserver : public AbsObserver{
     public:
-     virtual bool Visit(const std::string& msg){
+     virtual bool Visit(std::string msg){
          std::cout << msg << std::endl;
+         return true;
      }
 };
 

@@ -39,9 +39,8 @@ public:
         if( it != observers.end()) observers.erase(it);
         return std::find(observers.begin(), observers.end(), observer) == observers.end();
     }
-    virtual std::string Getmsg(){
-        return "BaseSubject";
-    };
+    /* 必须为纯虚函数 因为在父类调用了该函数，为防止调用了父类的虚函数则该虚函数必须写成纯虚的函数 */
+    virtual std::string Getmsg()=0;
 
 };
 
