@@ -5,12 +5,16 @@
 #include "AbsSubject.hpp"
 #include "../TaskQueue.hpp"
 
+namespace Global {
+    static std::shared_ptr<TaskQueue> task_queue (new  ThreadPool(CPPHTTPLIB_THREAD_POOL_COUNT));
+}
+
 class DP_EXPORT BaseSubject : public AbsSubject{
     private:
     std::mutex _observersmutex;
-    std::unique_ptr<TaskQueue> task_queue;
+    std::shared_ptr<TaskQueue> task_queue;
 public:
-    BaseSubject():task_queue(new  ThreadPool(CPPHTTPLIB_THREAD_POOL_COUNT)){
+    BaseSubject():task_queue(Global::task_queue){
 
     }
     virtual ~BaseSubject(){
